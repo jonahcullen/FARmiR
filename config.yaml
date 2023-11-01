@@ -1,0 +1,57 @@
+
+bucket : se-smallseq
+sif : /panfs/jay/groups/27/mccuem/cull0084/.sif/hoof.sif
+samples : input_small.tsv
+
+release : [
+  #GCF_002863925.1_EquCab3.0,
+  Equus_caballus.EquCab3.0.103
+]
+
+layout : [
+  "single"
+]
+
+conda_envs :
+  trim        : qualcon
+  align       : align
+  qc          : qualcon
+  quant       : quant
+  cutadapt    : cutadapt
+  trace       : mirtrace
+  small       : small
+  prost       : prost
+  novel_small : novel_small
+
+rep_classes : [
+  'LINE', 'SINE', 'DNA', 'Simple_repeat', 
+  'LTR', 'Low_complexity', 'LTR_q', 'DNA_q', 
+  'Unknown', 'RC', 'RC_q', 'tRNA', 
+  'snRNA', 'RNA', 'rRNA', 'srpRNA', 
+  'Satellite', 'scRNA'
+]
+
+# RULE-SPECIFIC PARTITIONS
+partitions :
+  assem : "amdsmall,amdlarge,amd512,ram256g"
+
+uniprot : ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+pfam    : ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
+
+# split longest orfs fasta
+size : 200
+
+Equus_caballus.EquCab3.0.103 :
+  resource : Ensembl
+  release  : Equus_caballus.EquCab3.0.103
+  fasta    : ftp://ftp.ensembl.org/pub/release-103/fasta/equus_caballus/dna/Equus_caballus.EquCab3.0.dna.toplevel.fa.gz
+  gff      : ftp://ftp.ensembl.org/pub/release-103/gff3/equus_caballus/Equus_caballus.EquCab3.0.103.gff3.gz
+  gtf      : ftp://ftp.ensembl.org/pub/release-103/gtf/equus_caballus/Equus_caballus.EquCab3.0.103.gtf.gz
+
+# NOTE the format with the period instead of the colon - this is for file
+# naming purposes and is changed to colon prior to running ggsashimi
+regions : [
+    'chr1.35738288-35747223','chr17.18754716-18844482',
+    'chr4.36835017-36840089','chr15.7175516-7390925',
+    'chr5.38570602-38571592'
+]
