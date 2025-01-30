@@ -53,11 +53,10 @@ mamba create \
 
 **2. Download the container**
 
-Due to the size of the included reference genomes and index files (and depending on your internet speed) this should take ~5 minutes.
-
 ```
 wget https://s3.msi.umn.edu/se-smallseq/public/sif/hoof.sif
 ```
+This should take ~5 minutes.
 
 **3. Clone this repo**
 
