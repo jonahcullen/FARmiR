@@ -3,7 +3,7 @@
 FARmiR is a Snakemake-based pipeline for processing and analyzing miRNAs/isomiRs from small RNA sequencing data. It includes steps for quality control, adapter prediction and trimming, annotation and quantification with [isoMiRmap](https://github.com/TJU-CMC-Org/isoMiRmap), evaluation of miRNA candidates using non-coding RNA databases and expression thresholds, and refinement of miRNA profiles. The workflow supports high-performance computing environments with Slurm integration and provides structured outputs for downstream analysis and visuazliation with [AIMEE](https://github.com/jonahcullen/AIMEE).
 
 <p align="center">
-  <img src="figures/pipeline.png" width="700" height="350" title="farmir pipeline">
+  <img src="figures/pipeline.png" width="700" height="240" title="farmir pipeline">
 </p>
 
 ## Dependencies
