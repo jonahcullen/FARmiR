@@ -1,6 +1,4 @@
 
-# NOTE - running all samples and will filter out those to be excluded
-# during an aggregate rule
 rule isomirmap_quant:
     input:
         sized      = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.mirna.unaligned_mm00.fastq'),
@@ -53,7 +51,6 @@ rule isomirmap_combine:
                 u=units_small.itertuples(), 
                 bucket=config['bucket'], 
                 release=[
-                   #'GCF_002863925.1_EquCab3.0',
                     'Equus_caballus.EquCab3.0.103'
                 ],
             ))
@@ -133,6 +130,7 @@ rule isomirmap_combine:
         gff_rpm.columns = gff_rpm.columns.str.replace('.RPM_inputFile', '')
         gff_rpm.to_csv(output.rpm_mat, sep='\t')
 
+localrules: isomirmap_filter
 rule isomirmap_filter:
     input:
         ct_mat  = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/merge/isomir_cts.isomirmap.tsv'),
@@ -181,6 +179,7 @@ rule isomirmap_filter:
 
 # for each mature sequence (uid), get the numbers of different precursors, ref
 # matures found, isomirs, isomirs with seed shifts (5p), and filter type
+localrules: isomirmap_descrip
 rule isomirmap_descript:
     input:
         rpm_exp = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/merge/isomir_rpm.isomirmap_exp_filt.tsv'),

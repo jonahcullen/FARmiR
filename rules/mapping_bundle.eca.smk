@@ -8,111 +8,10 @@ import pandas as pd
 from Bio import SeqIO
 from Bio.Seq import Seq
 
-# for the horse, mirpro was used to predict novel hairpins and matures. these
-# were processed further (novel.smk) and were then combined with liftover of
-# the eca2-based gff from mirbase to try and recover the 13 hairpins (and
-# matures) that were missed by liftoff (unmapped_features.txt).
-
-# STEP 0. 13 hairpins (and matures) were missing from liftoff (unmapped_features.txt). attempted to
-# use ucsc for liftover of bed file to try and find missing
-
-# get eca.gff3 in the corrrecct format
-#gff2bed < eca.gff3 > eca.bed
-#
-#with open('eca.bed', 'r') as f_in, open('eca_ucsc_mod.bed', 'w') as f_out:
-#    for line in f_in:
-#        #line = line.strip().split()
-#        #line[0] = chrom
-#        #line[1] = start
-#        #line[2] = end
-#        #line[6] = score
-#        #line[8] = name
-#        #line[5] = strand
-#        chrom,start,end,_,_,strand,score,_,_,name = line.strip().split()
-#        print(
-#            chrom, start, end, name,
-#            score, strand,
-#            sep = '\t', file=f_out
-#        )
-#        
-#cut -f 1 eca_db/unmapped_features.txt | grep -Fwf - UCSC_LIFT/hglft_genome_38b7f_206270.bed > eca_ucsc_missing.bed
-
-#chrUn_NW_019643432v1    850     991     ID=MI0028074;Alias=MI0028074;Name=eca-mir-8935-1        1       -
-#chrUn_NW_019643432v1    929     954     ID=MIMAT0034464;Alias=MIMAT0034464;Name=eca-miR-8935;Derives_from=MI0028074     1       -
-#chrUn_NW_019643432v1    4900    5045    ID=MI0028083;Alias=MI0028083;Name=eca-mir-8935-2        1       -
-#chrUn_NW_019643432v1    4980    5005    ID=MIMAT0034464_1;Alias=MIMAT0034464;Name=eca-miR-8935;Derives_from=MI0028083   1       -
-#chrUn_NW_019643432v1    850     991     ID=MI0028209;Alias=MI0028209;Name=eca-mir-8935-3        1       -
-#chrUn_NW_019643432v1    929     954     ID=MIMAT0034464_2;Alias=MIMAT0034464;Name=eca-miR-8935;Derives_from=MI0028209   1       -
-#chr13   27931749        27931774        ID=MIMAT0034679;Alias=MIMAT0034679;Name=eca-miR-9128;Derives_from=MI0028312     1       -
-#chr13   26384622        26384713        ID=MI0028312_3;Alias=MI0028312;Name=eca-mir-9128-2      1       -
-#chr13   26384633        26384658        ID=MIMAT0034679_2;Alias=MIMAT0034679;Name=eca-miR-9128;Derives_from=MI0028312   1       -
-#chr13   41809741        41809762        ID=MIMAT0013055;Alias=MIMAT0013055;Name=eca-miR-1842;Derives_from=MI0012799     1       +
-#chr13   41809741        41809801        ID=MI0012799;Alias=MI0012799;Name=eca-mir-1842  1       +
-#chrX    119911999       119912082       ID=MI0028353;Alias=MI0028353;Name=eca-mir-8908g-1       1       -
-#chrX    119912048       119912072       ID=MIMAT0034708_1;Alias=MIMAT0034708;Name=eca-miR-8908g;Derives_from=MI0028353  1       -
-
-# conver the above to ensembl contigs and add - none of these three MI IDs are in the liftoff version
-
-# 3 of the 13 were found on at least one chrom
-
-# a. ID=MI0028312_3;Alias=MI0028312 with ID=MIMAT0034679_2;Alias=MIMAT0034679
-#    - this MI hairpin was in fact found by liftoff but the mature MIMAT was mssing so
-#      only the liftoff version was retained
-#    - UCSC also called ID=MIMAT0034679;Alias=MIMAT0034679 however the coordinates are 
-#      incorrect where liftoff's version ID=MIMAT0034679_3;Alias=MIMAT0034679 appears
-#      correct
-#    - ID=MIMAT0034679;Alias=MIMAT0034679 at chr13:27931749-27931774 was removed from 
-#      eca_db/eca3.ens_manual.bed below as there are no hairpins at that location
-# b. ID=MI0012799;Alias=MI0012799 with ID=MIMAT0013055;Alias=MIMAT0013055
-#    - this hairpin was also found by liftoff but the mature MIMAT was missing
-# c. ID=MI0028353;Alias=MI0028353 with ID=MIMAT0034708_1;Alias=MIMAT0034708
-#    - this hairpin and mature were missing entirely by liftoff
-# d. all 3 contig MIs and associated matures were missing from liftoff and were added to eca3.ens_manual.bed
-
-# add the ucsc found to eca3.ens_manual.bed
-#rg -e MI0012799 -e MI0028353 -e MI0028312 UCSC_LIFT/hglft_genome_38b7f_206270.bed >> eca_db/eca3.ens_manual.bed
-# this then has to be modified as the ucsc format was slightly different
-
-# subsequently decided to include the three MI IDs located solely on contigs
-#rg -e MI0028074 -e MI0028083 -e MI0028209 UCSC_LIFT/hglft_genome_38b7f_206270.bed >> eca_db/eca3.ens_manual.bed
-
-# novel_mirna.sorted.bed was generated (novel.smk) and needs to be combined 
-# with eca3.ens_manual.bed and sorted
-
-#cat eca_db/eca3.ens_manual.bed eca_db/novel_mirna.sorted.bed \
-#    | sort -k 1,1 -k2,2n \
-#    > eca_db/eca3.ens_manual_novel.sorted.TMP.bed
-#
-# convert refseq chrUn to ensembl's PJAA
-#refseq = pd.read_csv(
-#    'GCF_002863925.1_EquCab3.0_genomic.dict', 
-#    sep='\t', skiprows=1, usecols = [1,3],
-#    names = ['refseq_contig', 'm5']
-#)
-#
-#ensembl = pd.read_csv(
-#    'Equus_caballus.EquCab3.0.103_genomic.nice.dict', 
-#    sep='\t', skiprows=1, usecols = [1,3],
-#    names = ['ensembl_contig', 'm5']
-#)
-#
-#merged_df = pd.merge(refseq, ensembl, on='m5')
-#
-#merged_df['refseq_mod'] = merged_df['refseq_contig'].str.replace('SN:', 'chrUn_').str.replace('\.1', 'v1')
-#merged_df['ensembl_mod'] = merged_df['ensembl_contig'].str[3:]
-# get dictionary
-#d_convert = merged_df.set_index('refseq_mod')['ensembl_mod'].to_dict()
-#
-#with open('eca_db/eca3.ens_manual_novel.sorted.TMP.bed', 'r') as f_in, \
-#    open('eca_db/eca3.ens_manual_novel.sorted.bed', 'w') as f_out:
-#    for line in f_in:
-#        line = line.strip().split()
-#        if line[0] in d_convert:
-#            line[0] = d_convert[line[0]]
-#        print('\t'.join(line), file=f_out)
 
 # final output was saved to secondary manually at {bucket}/public/mirbase/v22/eca_db/eca3.ens_manual_novel.sorted.bed
 # NOTE - very equine specific
+localrules: refseq_ensembl_table
 rule refseq_ensembl_table:
     input:
         ens = S3.remote('{bucket}/public/refgen/Equus_caballus.EquCab3.0.103/Equus_caballus.EquCab3.0.103_genomic.nice.dict'),
@@ -138,9 +37,6 @@ rule refseq_ensembl_table:
         merged_df['ensembl_mod'] = merged_df['ensembl_contig'].str[3:]
         merged_df.to_csv(output.ref_ens_table, index=False, sep='\t')
 
-# get dictionary
-#d_convert = merged_df.set_index('refseq_mod')['ensembl_mod'].to_dict()
-
 #####################
 # mirna space
 #####################
@@ -148,6 +44,7 @@ rule refseq_ensembl_table:
 # NOTE - input.bed was generated manually above so input.novel is 
 # included as an input here to ensure those rules are completed prior to
 # generating the mapping bundle
+localrules: hairpin_flanks
 rule hairpin_flanks:
     input:
         novel = S3.remote('{bucket}/private/small/novel/{release}/novel_mirna.sorted.bed'),
@@ -200,6 +97,7 @@ rule flank_fa:
         '''
 
 # clean up flanks fa by replacing .1 with v1 in PJAA contigs (eca3 specific?)
+localrules: mirnaspace_bundle
 rule mirnaspace_bundle:
     input:
         flanks_fa = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/temp/eca3.ens_manual_novel.sorted_flanks.fa'),
@@ -219,6 +117,7 @@ rule mirnaspace_bundle:
 # lookup table
 #####################
 # for each hairpin, generate all possible substrings of length 17 to 25
+localrules: hairpin_substrings
 rule hairpin_substrings:
     input:
         bundle_fa = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/bundle/eca3_bundle_mirnaspace.fa'),
@@ -272,6 +171,7 @@ rule substrings_align_ref:
                 2> {output.bt_log}
         '''
 
+localrules: lookups_bundle
 rule lookups_bundle:
     input:
         space_fa = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/bundle/eca3_bundle_mirnaspace.fa'),
@@ -326,7 +226,6 @@ rule lookups_bundle:
 # other annotations
 #####################
 # get repeat classes and convert to bed
-# NOTE - this is currently eca3 specific
 rule repeats_to_bed:
     output:
         reps     = S3.remote('{bucket}/public/repeats/{release}/equCab3.fa.out'),
@@ -352,14 +251,11 @@ rule repeats_to_bed:
             rmsk2bed < equCab3.fa.out > {params.rep_bed_name}
         '''
 
-# NOTE - this needs to be a checkpoint - could not get to work immediately so
-# moved class types to config
 checkpoint separate_repeat_types:
     input:
         reps_bed = S3.remote('{bucket}/public/repeats/{release}/equCab3.fa.bed'),
     output:
         reps_dir = directory('{bucket}/public/repeats/{release}/beds'),
-       #reps     = S3.remote('{bucket}/public/repeats/{release}/beds/{rep}.eca3.bed'),
     run:
         # loop through bed file to get each type into list
         d_types = defaultdict(list)
@@ -421,19 +317,9 @@ def get_bed_reps(wildcards):
         rep=REPS
     )
 
+localrules: combine_class_islands
 rule combine_class_islands:
     input:
-       #S3.remote(
-       #    expand(
-       #        '{bucket}/public/repeats/{release}/merged/merged_{rep}.eca3.bed',
-       #        bucket=config['bucket'], 
-       #        release=[
-       #           #'GCF_002863925.1_EquCab3.0',
-       #            'Equus_caballus.EquCab3.0.103'
-       #        ],
-       #        rep=config['rep_classes']
-       #    )
-       #)
         get_bed_reps
     output:
         S3.remote('{bucket}/public/repeats/{release}/merged_all_repeats.eca3.sorted.bed'), 
@@ -443,6 +329,7 @@ rule combine_class_islands:
         '''
 
 # clean up the bed file names and include the score column ('.') in appropriate position
+localrules: cleanup_combined_islands
 rule cleanup_combined_islands:
     input:
         ref_ens = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/temp/refseq_ens_table.tsv'),
@@ -559,6 +446,7 @@ rule substrings_align_repeats:
                 2> {output.bt_log}
         '''
 
+localrules: repeats_bundle
 rule repeats_bundle:
     input:
         sam = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/temp/hairpin_sub_repeats.sam'),
@@ -595,6 +483,7 @@ rule repeats_bundle:
 #####################
 # meta coordinates
 #####################
+localrules: meta_coords_bundle
 rule meta_coords_bundle:
     input:
         bed   = S3.remote('{bucket}/public/mirbase/v22/eca_db/eca3.ens_manual_novel.sorted.bed')
@@ -623,6 +512,7 @@ rule meta_coords_bundle:
 #####################
 # NOTE - need to think about this one. the snp_vcf should be set in the config
 # or required elsewhere for more flexibility
+localrules: convert_snps_to_bed
 rule convert_snps_to_bed:
     input:
         snp_vcf = S3.remote('Hf2hrt/public/refgen/Equus_caballus.EquCab3.0.103/MNEc2M.EquCab3.09182018.recode.rmGT.refseqnames.chrIDmod.vcf')
@@ -672,6 +562,7 @@ rule intersect_snps_flanks:
 
 # for each row in the intersection, check if snp is contained, and generate 
 # dictionary with the key being the miRNA sequence containing the snp
+localrules: snp_contained
 rule snp_contained:
     input:
         space_fa = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/bundle/eca3_bundle_mirnaspace.fa'),
@@ -732,6 +623,7 @@ rule snp_contained:
 #####################
 # all bundle
 #####################
+localrules: bundle_config
 rule bundle_config:
     input:
         space_fa   = S3.remote('{bucket}/private/small/quant/isomirmap/{release}/bundle/eca3_bundle_mirnaspace.fa'),

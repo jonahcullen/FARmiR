@@ -8,9 +8,6 @@ rule fastp_small_pre_trim:
     params:
         conda_env = config['conda_envs']['trim'],
         title     = '{tissue}_{sample}_with_adapters',
-       #layout_in = lambda wildcards, input: (
-       #    f'-i {input.r1} -I {input.r2}' if wildcards.layout == 'paired' else f'-i {input.r1}'
-       #)
     threads: 4
     resources:
         time   = 30,
@@ -48,7 +45,6 @@ rule fastp_small_pre_trim:
                     --thread {threads}
             fi
         '''
-               #-i {input.r1} -I {input.r2} \
 
 # due to observed issues with fastp automatically finding adapters from se
 # samples (could be older samples perhaps?), added a step to find adapters
@@ -67,11 +63,6 @@ rule remove_adapters:
         r1_base    = lambda wildcards, output: os.path.dirname(output.master_adapt),
         r1_fastq   = lambda wildcards, input: os.path.basename(str(input.r1)),
         trim_fastq = lambda wildcards, output: os.path.basename(output.se_trimmed),
-       #se_trimmed = lambda wildcards, output: os.path.join(
-       #    os.path.dirname(output.master_adapt), 
-       #    f'good-mapping/{wildcards.sample}_trimmed.fastq'
-       #),
-       #se_trimmed = '{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/good-mapping/{sample}_trimmed.fastq',
         cut_env    = config['conda_envs']['cutadapt'],
         fastp_env  = config['conda_envs']['trim'],
         title      = '{tissue}_{sample}_remove_adapters',
@@ -163,102 +154,6 @@ rule remove_adapters:
                 echo "PE data, adapter detected automatically"
             fi
         '''
-                   #gunzip -c {params.r1_fastq} > good-mapping/{params.trim_fastq}
-#       '''
-#           set +eu
-
-#           if [ {input.r1} == {input.r2} ]; then
-#               echo "Processing {wildcards.sample} ({wildcards.tissue}) as SINGLE"
-#               source activate {params.cut_env}
-
-#               # due to the way adapt_find works, need to cd to each sample
-#               # directory prior to running otherwise master_adapters.csv will
-#               # be overwritten by each sample running in parallel
-#               cp {input.r1} {params.r1_base} && cd {params.r1_base}
-#               # from here run adapt_find, capture the 3' adapter, and return
-#               adapt_find.py ILLUMINA --files {params.r1_fastq} --output_path ./ &&
-#               ADAPT=$(tail -n +2 master_adapters.csv | cut -d ',' -f 4) &&
-#               cd -
-#               
-#               conda deactivate
-#               source activate {params.fastp_env}
-#          
-#               if [ "$ADAPT" != "na" ]; then
-#                   fastp \
-#                       -i {input.r1} \
-#                       -o {output.r1_trim} \
-#                       --dont_overwrite \
-#                       --html {output.html} \
-#                       --json {output.json} \
-#                       --report_title {params.title} \
-#                       --adapter_sequence "$ADAPT" \
-#                       --disable_quality_filtering \
-#                       --disable_length_filtering \
-#                       --disable_trim_poly_g \
-#                       --thread {threads}
-#                   echo "Found and removed adapter $ADAPT"
-#               else
-#                   fastp \
-#                       -i {input.r1} \
-#                       -o {output.r1_trim} \
-#                       --dont_overwrite \
-#                       --html {output.html} \
-#                       --json {output.json} \
-#                       --report_title {params.title} \
-#                       --disable_quality_filtering \
-#                       --disable_length_filtering \
-#                       --disable_trim_poly_g \
-#                       --thread {threads}
-#                   echo "No adapter found (adapter == $ADAPT)"
-#               fi
-#               echo "Create empty R2 read"
-#               # touch for empty r2
-#               touch {output.r2_trim}
-#           else
-#               echo "Processing {wildcards.sample} ({wildcards.tissue}) as PAIRED"
-#               source activate {params.fastp_env}
-
-#               fastp \
-#                   -i {input.r1} -I {input.r2} \
-#                   -o {output.r1_trim} -O {output.r2_trim} \
-#                   --dont_overwrite \
-#                   --html {output.html} \
-#                   --json {output.json} \
-#                   --report_title {params.title} \
-#                   --detect_adapter_for_pe \
-#                   --disable_quality_filtering \
-#                   --disable_length_filtering \
-#                   --disable_trim_poly_g \
-#                   --thread {threads}
-
-#               # touch for empty barcode file
-#               touch {output.se_adapt}
-#               echo "PE data, adapter detected automatically"
-#           fi
-#       '''
-    
-# NOTE - MOVE THE RULE AND OUTPUT TO THE QC RULES
-#rule gather_se_adapter_logs:
-#    input:
-#        adapts = S3.remote(expand(
-#            '{bucket}/private/fastq/trimmed/{u.tissue}/{u.sample}/small/master_adapters.csv',
-#            u=units_small.itertuples(), 
-#            bucket=config['bucket'], 
-#        ))
-#    output:
-#        se_adapt = S3.remote('{bucket}/private/fastq/trimmed/small_se_adapters.csv',keep_local=True),
-#    params:
-#        r1_base   = lambda wildcards, output: os.path.dirname(output.se_adapt),
-#        r1_fastq  = lambda wildcards, input: os.path.basename(str(input.r1)),
-#        cut_env   = config['conda_envs']['cutadapt'],
-#        fastp_env = config['conda_envs']['trim'],
-#        title     = '{tissue}_{sample}_remove_adapters',
-#    threads: 4
-#    resources:
-#        time   = 1440,
-#        mem_mb = 60000
-#    run:
-#        # loop through master_adapters and extract
 
 rule fastp_small_post_trim:
     input:
@@ -314,8 +209,6 @@ rule fastp_small_post_trim:
 
 rule fastq_join_small_clean:
     input:
-       #r1_clean = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/{tissue}_{sample}_R1_001.clean.fastq.gz'),
-       #r2_clean = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/{tissue}_{sample}_R2_001.clean.fastq.gz'),
         r1_clean = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_R1.clean.fastq.gz'),
         r2_clean = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_R2.clean.fastq.gz'),
     output:
@@ -351,11 +244,9 @@ rule fastq_join_small_clean:
 rule mirec_cleanup_fastq:
     input:
         fq_join = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.clean.fastq.gz'),
-       #sized = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}_join.max_sized.clean.mm0{mm}_ncref_rfam.unaligned.fastq'),
     output:
         fq_join   = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.clean.fastq'),
         corrected = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.corrected.clean.fastq.gz'),
-       #corrected = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.corrected.mm0{mm}.fastq'),
     params:
         base      = lambda wildcards, input: os.path.dirname(input.fq_join),
         in_fastq  = lambda wildcards, output: os.path.basename(output.fq_join),
@@ -389,7 +280,6 @@ rule mirec_cleanup_fastq:
 rule fastp_small_post_join:
     input:
         corrected = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.corrected.clean.fastq.gz'),
-       #fq_join = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.clean.fastq.gz'),
     output:
         sized = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.min_sized.corrected.clean.fastq.gz'),
         html  = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}.post_join.fastp.html'),
@@ -420,17 +310,13 @@ rule fastp_small_post_join:
                 --disable_trim_poly_g \
                 --thread {threads}
         '''
-#--length_limit {params.max_length} \
 
-# NOTE - MOVE RULE AND OUTPUT TO QC IN ADDITIION TO THE MASTER_ADAPTER RULE ABOVE
-# multiqc log not including the initial number of joined fastq reads, only the
-# fastp filtered number from above. gather and parse here
+localrules: gather_post_join_logs
 rule gather_post_join_logs:
     input:
         jsons = S3.remote(
             expand(
                 '{bucket}/private/fastq/trimmed/{u.tissue}/{u.sample}/small/{u.tissue}_{u.sample}.post_join.fastp.json',
-               #'{bucket}/private/fastq/trimmed/{u.tissue}/{u.sample}/{u.tissue}_{u.sample}.post_join.fastp.json',
                 u=units_small.itertuples(), 
                 bucket=config['bucket'], 
             )
@@ -445,8 +331,6 @@ rule gather_post_join_logs:
         # read post join jsons and extract pre- and post-filtered counts
         d = {}
         for i in input.jsons:
-           #sample = os.path.basename(i).rsplit('.', 3)[0]
-           #sample = wildcards.sample
             res = re.match('(^[^0-9]+)_(.*)$', os.path.basename(i).rsplit('.', 3)[0])
             sample = res.group(2)
             tissue = res.group(1)
@@ -467,14 +351,7 @@ rule gather_post_join_logs:
             for v in d.values():
                 print(*v,sep='\t',file=out)
 
-#############################################
-# alignment strategy modified from Guo et al 2016
-# 1. align joined fastqs against noncoding
-#    ref and rfam both without mirnas
-# 2. unaligned for miraligner, mipro, etc.
-#    - the unaligned *should* contain only miRNAs
-#############################################
-# NOTE - LINES 478 AND 479 SOMEHOW GOT DELETED AND SAVED - ADDED BACK ENSURE NO RERUNS THOUGH
+localrules: filter_mirna_nc_ref
 rule filter_mirna_nc_ref:
     input:
        ref_ncrna = S3.remote('{bucket}/public/refgen/{release}/Equus_caballus.EquCab3.0.ncrna.fa.gz')
@@ -487,6 +364,7 @@ rule filter_mirna_nc_ref:
                 if 'transcript_biotype:miRNA' not in rec.description:
                     print(rec.format('fasta'),end='',file=out)
 
+localrules: bowtie_index_ncrna_ref
 rule bowtie_index_ncrna_ref:
     input:
         ref_sans_mirna  = S3.remote('{bucket}/public/refgen/{release}/{release}.ncrna_sans_mirna.fa'),
@@ -522,7 +400,6 @@ rule small_align_ncref_sans_mirna:
         bt_idx   = rules.bowtie_index_ncrna_ref.output.ref_idx_dir,
         ref_fa   = S3.remote('{bucket}/public/refgen/{release}/BOWTIE_INDICES/NCREF/{release}.ncrna_sans_mirna.fa',keep_local=True),
         sized_fq = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.min_sized.corrected.clean.fastq.gz'),
-       #sized_fq = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/{tissue}_{sample}_join.sized.clean.fastq.gz'),
     output:
         sam    = S3.remote('{bucket}/private/small/align/bowtie/filters/{release}/{tissue}/{sample}/mismatch_0{mm}/all/{tissue}_{sample}.mm0{mm}_all.ncref.sam'),
         bt_log = S3.remote('{bucket}/private/small/align/bowtie/filters/{release}/{tissue}/{sample}/mismatch_0{mm}/all/{tissue}_{sample}.mm0{mm}_all.ncref.bwt.log'),
@@ -552,8 +429,8 @@ rule small_align_ncref_sans_mirna:
                 --un {output.unmap} \
                 2> {output.bt_log}
         '''
-# 20230310 AS A TEST REMOVED -m 1 TO SEE IF THAT HELP REMOVES JUNK...
 
+localrules: bowtie_index_ncrna_rfam
 rule bowtie_index_ncrna_rfam:
     input:
         rfam_sans_mirna = S3.remote('{bucket}/public/rfam/v14/rfam148_ncrna.sans_mirna.fa')
@@ -589,7 +466,6 @@ rule small_align_rfam_sans_mirna:
         bt_idx = rules.bowtie_index_ncrna_rfam.output.rfam_idx_dir,
         ref_fa = S3.remote('{bucket}/public/rfam/v14/BOWTIE_INDICES/RFAM/rfam148_ncrna.sans_mirna.dna.fa',keep_local=True),
         unmap  = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}_join.min_sized.corrected.clean.mm0{mm}_ncref.unaligned.fastq'),
-       #unmap  = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}_join.sized.clean.mm0{mm}_ncref.unaligned.fastq'),
     output:
         sam    = S3.remote('{bucket}/private/small/align/bowtie/filters/{release}/{tissue}/{sample}/mismatch_0{mm}/all/{tissue}_{sample}.mm0{mm}_all.ncref_rfam.sam'),
         bt_log = S3.remote('{bucket}/private/small/align/bowtie/filters/{release}/{tissue}/{sample}/mismatch_0{mm}/all/{tissue}_{sample}.mm0{mm}_all.ncref_rfam.bwt.log'),
@@ -623,7 +499,6 @@ rule small_align_rfam_sans_mirna:
 rule fastp_size_select_unmap:
     input:
         unmap  = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}_join.min_sized.corrected.clean.mm0{mm}_ncref_rfam.unaligned.fastq'),
-       #unmap = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}_join.sized.clean.mm0{mm}_ncref_rfam.unaligned.fastq'),
     output:
         sized = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.mirna.unaligned_mm0{mm}.fastq'),
         html  = S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.mm0{mm}.fastp.html'),
@@ -655,6 +530,7 @@ rule fastp_size_select_unmap:
                 --thread {threads}
         '''
 
+localrules: gather_fastp_jsons
 rule gather_fastp_jsons:
     input: 
         process_steps = S3.remote(
@@ -671,7 +547,6 @@ rule gather_fastp_jsons:
                 u=units_small.itertuples(),
                 bucket=config['bucket'],
                 release=[
-                   #'GCF_002863925.1_EquCab3.0',
                     'Equus_caballus.EquCab3.0.103'
                 ],
                 mm='0',
@@ -729,22 +604,11 @@ rule gather_fastp_jsons:
             for k,v in d.items():
                 print(k, ','.join(map(str,v)), sep=',', file=f_out)
 
-           #with open(i, 'r') as f1_in, open(j, 'r') as f2_in:
-           #    # pre-process read counts
-           #    pre = json.load(f1_in)
-           #    pre_reads = pre['filtering_result']['passed_filter_reads']
-           #    # final post-process read counts
-           #    post = json.load(f2_in)
-           #    post_reads = post['filtering_result']['passed_filter_reads']
-           #l.append([tissue, sample, tissue_sample, pre_reads, post_reads])
-
 rule convert_corrected_to_fasta:
     input:
         S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.mirna.unaligned_mm00.fastq'),
-       #S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.corrected.mm00.fastq'),
     output:
         S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.mirna.unaligned_mm00.fasta'),
-       #S3.remote('{bucket}/private/fastq/trimmed/{tissue}/{sample}/small/noncode_filt/{release}/{tissue}_{sample}.corrected.mm00.fasta'),
     params:
         conda_env = config['conda_envs']['quant']
     threads: 1
@@ -758,5 +622,4 @@ rule convert_corrected_to_fasta:
 
             seqtk seq -A {input} > {output}
         '''
-
 

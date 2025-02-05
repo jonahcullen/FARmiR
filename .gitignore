@@ -1,9 +1,8 @@
-# Pipeline out
+# Pipeline
 .snakemake/
 .logs/
-Hoof2Heart/
 Jobs/
-qc/
+config/config.yaml
 
 # vim
 # Swap

@@ -1,7 +1,6 @@
 
 rule ec2_nice_fasta:
     input:
-       #fna = FTP.remote("http://ftp.ensembl.org/pub/release-94/fasta/equus_caballus/dna/Equus_caballus.EquCab2.dna.toplevel.fa.gz")
         fna = S3.remote("{bucket}/public/refgen/Equus_caballus.EquCab2.94/Equus_caballus.EquCab2.dna.toplevel.fa")
     output:
         nice_fna = S3.remote("{bucket}/public/refgen/Equus_caballus.EquCab2.94/Equus_caballus.EquCab2.94_genomic.nice.fna")
@@ -49,6 +48,7 @@ rule ec2_nice_fasta:
                         line = ' '.join([new_name, name] + fields + ['\n'])
                 print(line,file=OUT,end='')
 
+localrules: get_mirbase_fastas
 rule get_mirbase_fastas:
     output:
         mb_pre  = S3.remote("{bucket}/public/mirbase/v22/hairpin.fa",keep_local=True),
@@ -111,6 +111,7 @@ rule get_mirbase_fastas:
 
         '''
 
+localrules: combine_other_mature
 rule combine_other_mature:
     input:
         bta_mat = S3.remote("{bucket}/public/mirbase/v22/mature_bta.fa",keep_local=True),
@@ -299,6 +300,7 @@ rule ens_eca2_liftover_eca3:
             mv unmapped_features.txt {output.unmapped}
         '''
 
+localrules: modify_lifted_gff
 rule modify_lifted_gff:
     input:
         eca3_gff = S3.remote("{bucket}/public/mirbase/v22/eca_db/eca3.ens.gff"),

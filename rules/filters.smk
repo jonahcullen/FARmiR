@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from scipy import stats
 
+localrules: filter_samples_reads
 rule filter_samples_reads:
     input:
         pre_jsons = S3.remote(
@@ -26,8 +27,6 @@ rule filter_samples_reads:
         ),
     output:
         samples = S3.remote('{bucket}/private/small/quant/preproc_read_counts.all_samples.tsv', keep_local=True),
-       #inc_samples = S3.remote('{bucket}/private/small/quant/preproc_passed_reads.include_samples.tsv'),
-       #exc_samples = S3.remote('{bucket}/private/small/quant/preproc_passed_reads.exclude_samples.tsv'),
     run:
         # zip pre and post fastp jsons together to generate df
         l = []
@@ -70,9 +69,8 @@ rule filter_samples_reads:
        
         # write to outputs
         df.to_csv(output.samples, sep='\t', index=False)
-       #inc_samples.to_csv(output.inc_samples, sep='\t', index=False)
-       #exc_samples.to_csv(output.exc_samples, sep='\t', index=False)
-        
+       
+localrules: filter_samples_biotypes
 rule filter_samples_biotypes:
     input:
         types = S3.remote(
@@ -80,7 +78,6 @@ rule filter_samples_biotypes:
                 '{bucket}/private/small/align/bowtie/{release}/all_samples.featcts.csv',
                 bucket=config['bucket'], 
                 release=[
-                   #'GCF_002863925.1_EquCab3.0',
                     'Equus_caballus.EquCab3.0.103'
                 ],
             )
@@ -102,7 +99,8 @@ rule filter_samples_biotypes:
         # label the sample as fail if proportion of mirna < 0.1 and write file
         df2 = df.groupby(['sample', 'tissue', 'seq_set'], group_keys=True).apply(mirna_fails)
         df2.to_csv(output.samples, sep='\t', index=False)
-        
+
+localrules: combine_filters
 rule combine_filters:
     input:
         filt_counts = S3.remote('{bucket}/private/small/quant/preproc_read_counts.all_samples.tsv', keep_local=True),

@@ -1,5 +1,5 @@
 
-# NOTE - this is not generic yet...
+# NOTE - this is not generic yet
 rule blast_db_rnacentral:
     input:
         S3.remote('{bucket}/public/rnacentral/v22/Equus_caballus_rnacentral.fa')
@@ -58,6 +58,7 @@ rule blast_novel_precurs_rnacent:
                 > {output}
         '''
 
+localrules: filter_blast_rnacent
 rule filter_blast_rnacent:
     input:
         precurs = S3.remote('{bucket}/private/small/quant/mirpro/{release}/multi_sample/result/novel_precursor.fa'),
@@ -129,6 +130,7 @@ rule merge_precurs:
                 > {output.temp_bed}
         '''
 
+localrules: reformat_merged_bed
 rule reformat_merged_bed:
     input:
         temp_bed = S3.remote('{bucket}/private/small/novel/{release}/novel_precursor.nc_filter.sorted.TMP.bed'),
@@ -224,6 +226,7 @@ rule blast_merged_ref:
         '''
 
 # count the number of hits for each one as "interspersed repeats" to be removed
+localrules: get_novel_candidates
 rule get_novel_candidates:
     input:
         blastn = S3.remote('{bucket}/private/small/novel/{release}/filtered_novel_blastn.out'),
@@ -252,6 +255,7 @@ rule get_novel_candidates:
 # the precursors were merged. to determine which one to keep: 1. keep the one 
 # with the highest total expression by summing the counts. 2. if equal counts, 
 # randomly pick
+localrules: filter_by_norm_exp
 rule filter_by_norm_exp:
     input:
         precur_cts = S3.remote('{bucket}/private/small/quant/mirpro/{release}/multi_sample/result/result_novel_precursor.csv'),
@@ -320,6 +324,7 @@ rule filter_by_norm_exp:
 # create a bed file from novel_precursor.exp_cands.fa and check for overlaps 
 # with eca3 mirna gff generated as part of make_nice.smk plus the manual 
 # addition of ucsc lift off (eca3_primary.ens_manual.sorted.bed)
+localrules: get_exp_precur_bed
 rule get_exp_precur_bed:
     input:
         exp_fa = S3.remote('{bucket}/private/small/novel/{release}/novel_precursor.exp_cands.fa'),
@@ -365,6 +370,7 @@ rule overlap_exp_precur_and_ref:
         '''
         
 # find novel ids with overlap greater than 16 (>=17)
+localrules: remove_precurs_overlap_ref
 rule remove_precurs_overlap_ref:
     input: 
         exp_sort      = S3.remote('{bucket}/private/small/novel/{release}/novel_precursor.exp_cands.sorted.bed'),
@@ -427,6 +433,7 @@ rule final_precur_fa:
                 -fo {output.precur_fa}
         '''
 
+localrules: final_precur_mature_beds
 rule final_precur_mature_beds:
     input:
         precur_fa   = S3.remote('{bucket}/private/small/novel/{release}/novel_precursor.final.fa'),
