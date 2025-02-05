@@ -10,7 +10,6 @@ from Bio.Seq import Seq
 
 
 # final output was saved to secondary manually at {bucket}/public/mirbase/v22/eca_db/eca3.ens_manual_novel.sorted.bed
-# NOTE - very equine specific
 localrules: refseq_ensembl_table
 rule refseq_ensembl_table:
     input:
