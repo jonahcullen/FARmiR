@@ -13,7 +13,7 @@ from pathlib import Path
 from collections import defaultdict
 
 singularity: config['sif']
-include: "src/utils.py"
+include: "rules/common.smk"
 
 from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
 FTP = FTPRemoteProvider()
