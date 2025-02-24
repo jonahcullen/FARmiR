@@ -64,3 +64,17 @@ This should take ~5 minutes.
 git clone git@github.com:jonahcullen/FARmiR.git
 ```
 
+## Usage
+
+Add info about pulling all public data from secondary.
+
+```
+DATA_DIR=/path/to/data/dir
+
+snakemake -s small_hoof.smk \
+    --use-singularity \
+    --singularity-args "-B $PWD,$DATA_DIR" \
+    --profile slurm.hoof2heart \
+    --configfile config/config.yaml \
+    --rerun-triggers mtime
+``` 
