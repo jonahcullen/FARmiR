@@ -74,7 +74,7 @@ DATA_DIR=/path/to/data/dir
 snakemake -s small_hoof.smk \
     --use-singularity \
     --singularity-args "-B $PWD,$DATA_DIR" \
-    --profile slurm.hoof2heart \
+    --profile profile/slurm.farmir \
     --configfile config/config.yaml \
     --rerun-triggers mtime
 ``` 
