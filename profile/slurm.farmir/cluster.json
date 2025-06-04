@@ -1,0 +1,452 @@
+{
+    "fastp_small_pre_trim" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "remove_adapters" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "fastp_small_post_trim" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "fastq_join_small_clean" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirtrace_pre_process" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "fastp_small_post_join" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "small_fastq_pre_filtered_lengths" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "small_fastq_filtered_lengths" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "gather_small_lengths" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "fastp_size_select_unmap" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirec_cleanup_fastq" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirtrace_post_process" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "convert_fastq_tabular" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "ec2_nice_fasta" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "get_eca_mirbase" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "modify_mirbase_gff" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "ens_eca2_liftover_eca3" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "miralign_fastq_tabular" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "srnabench_profile" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirgff3_miraligner" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirgff3_srnabench" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirgff3_stats_counts_export" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "tissue_miraligner_matrix" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "all_tissues_miraligner_matrix" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "convert_corrected_to_fasta" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "prost_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirgff3_prost" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "isomir_merge_count" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/perm_{wildcards.perm}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/perm_{wildcards.perm}/%j.{rule}.err"
+    },
+    "isomir_all_perms" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "novoindex_genome" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "mirpro_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "blast_db_rnacentral" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "blast_novel_precurs_rnacent" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "merge_precurs" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "blast_db_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "blast_merged_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "overlap_exp_precur_and_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "final_precur_fa" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "combine_final_beds" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "flank_fa" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "substrings_align_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "substrings_align_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "repeats_to_bed" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "create_class_islands" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "repeats_fa" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "bowtie_index_repeats" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "substrings_align_repeats" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "intersect_snps_flanks" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "isomirmap_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "isomirmap_combine" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "downsample_sized_fastqs" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "isomirmap_downsample_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "isomirmap_downsample_combine" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "pool_reads" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "mirpro_pooled_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "convert_fastq_to_fasta" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "convert_nc_filt_to_fasta" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "convert_fastq_to_fasta_gt25" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "bowtie_index_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "bbmap_index_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "bowtie_index_mod_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "bowtie_index_ncrna_filter" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "collapse_sample_fasta" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "combine_pre_filter_x_tissue" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.err"
+    },
+    "combine_post_filter_x_tissue" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.err"
+    },
+    "small_align_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.err"
+    },
+    "small_align_tissue_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.err"
+    },
+    "feature_counts_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.err"
+    },
+    "feature_counts_tissue_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/mm0{wildcards.mm}/{wildcards.seq_set}/%j.{rule}.err"
+    },
+    "gather_featcts_biotypes" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/%j.{rule}.err"
+    },
+    "small_align_ncref_sans_mirna" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/%j.{rule}.err"
+    },
+    "small_align_rfam_sans_mirna" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/mm0{wildcards.mm}/%j.{rule}.err"
+    },
+    "small_align_eca_hairpins" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "small_align_unknown_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "small_mapper_unknown_ref" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "novel_prediction_mirdeep2" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "combine_novel_mirna_x_tissue" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/%j.{rule}.err"
+    },
+    "collapse_unaligned_fasta" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "mirdeep2_quant" :
+    {
+        "output" : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "gather_mirdeep2_counts" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    },
+    "junc_modules_x_sample" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "junc_modules_x_tissue" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/%j.{rule}.err"
+    },
+    "infer_experiment" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "genebody_coverage" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "inner_distance" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "read_gc" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "read_distribution" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "read_duplication" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "bam_stat" :
+    {
+        "output" : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/{wildcards.release}/{wildcards.tissue}/{wildcards.sample}/%j.{rule}.err"
+    },
+    "multiqc" :
+    {
+        "output" : ".logs/{rule}/%j.{rule}.out",
+        "error"  : ".logs/{rule}/%j.{rule}.err"
+    }
+}
