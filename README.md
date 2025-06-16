@@ -136,6 +136,8 @@ Replace
 ### Dry run
 
 To check what would be executed without submitting any jobs
+
+```
 snakemake -s small_hoof.smk --configfile config/config.yaml -np
 ```
 
