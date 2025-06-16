@@ -1,7 +1,7 @@
 
 bucket : se-smallseq
 sif : /path/to/user/hoof.sif
-samples : input_small.tsv
+samples : samples.tsv
 
 release : [
   Equus_caballus.EquCab3.0.103
