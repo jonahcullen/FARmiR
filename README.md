@@ -62,7 +62,45 @@ This should take ~5 minutes.
 
 ```
 git clone git@github.com:jonahcullen/FARmiR.git
+cd FARmiR
 ```
+
+## Input files
+**1. Copy and edit the config file**
+
+```
+cp config/config.yaml.template config/config.yaml
+```
+
+Then open `config/config.yaml` and update
+- Update the path to the container under the `sif:` field
+
+```
+sif: /absolute/path/to/hoof.sif
+```
+
+- The path to your sample sheet
+
+```
+samples: /absolute/path/to/samples.tsv
+```
+
+By default, FARmiR is set up for
+- Single- or paired-end small RNA-seq
+- The EquCab3 reference genome from Ensembl realease 103
+
+These can be modified but doing so may require changes to how the workflow handles alignment, annotation parsing, and additional processing steps.
+
+> 💡 **Need a different genome or annotation (e.g., the upcoming Equine T2T assembly)?**
+> Please [open an issue](https://github.com/jonahcullen/FARmiR/issues/new) or [start a discussion](https://github.com/jonahcullen/FARmiR/discussions) — I’m happy to help guide integration of new references!
+
+**2. Prepare a sample sheet**
+You `samples.tsv` should be a tab-delimited file with (at minimum) the follwoing columns
+```
+sample	tissue	year	layout	fastq_1
+H001	lamina	2024	single	/absolute/path/to/H001_lamina_R1_001.fastq.gz
+```
+> Esnure the `layout` column is set to `single` or `paired`
 
 ## Usage
 
